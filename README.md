@@ -53,6 +53,9 @@ POST /newHero
 
 git clone https://github.com/Vladyslav3012/Habatik
 
+pip install "fastapi[standard]"
+pip install sqlmodel
+
 Запустити сервер:
 uvicorn Habatik.main:app --reload
 
