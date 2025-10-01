@@ -1,4 +1,5 @@
 from sqlmodel import create_engine, Field, SQLModel
+from Team.database import Team
 
 class Hero(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
