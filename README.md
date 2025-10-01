@@ -54,7 +54,7 @@ POST /newHero
 git clone https://github.com/Vladyslav3012/Habatik
 
 Запустити сервер:
-uvicorn main:app --reload
+uvicorn Habatik.main:app --reload
 
 Відкрити документацію в браузері:
 http://127.0.0.1:8000/docs
