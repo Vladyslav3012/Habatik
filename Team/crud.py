@@ -8,7 +8,7 @@ from Team.database import engine, Team
 router = APIRouter(tags=['Teams'], prefix='/teams')
 
 
-@router.post('/newTeam', response_model=Team)
+@router.post('/newTeam')
 def create_team(team: Team):
     with Session(engine) as session:
         session.add(team)
@@ -16,6 +16,12 @@ def create_team(team: Team):
         session.refresh(team)
         return {"New team": team}
 
+@router.get("/allTeam", response_model=List[Team])
+def get_all_team():
+    with Session(engine) as session:
+        statement = select(Team)
+        result = session.exec(statement)
+        return result.all()
 
 @router.get("/{team_id}", response_model=Team)
 def get_team_by_id(team_id: int):
@@ -26,18 +32,14 @@ def get_team_by_id(team_id: int):
         return result
 
 
-@router.get("/allTeam", response_model=List[Team])
-def get_all_team():
-    with Session(engine) as session:
-        statement = select(Team)
-        result = session.exec(statement)
-        return result.all()
 
 
-@router.put('/uptade/{team_id}', response_model=Team)
+@router.put('/uptade/{team_id}')
 def update_team_by_id(team_id: int, data_for_update: TeamSearch):
     with Session(engine) as session:
         team = session.get(Team, team_id)
+        if not team:
+            raise HTTPException(status_code=404, detail="team not found")
         if not data_for_update:
             raise HTTPException(status_code=404, detail="Please send data for update")
         if data_for_update.name:
@@ -53,7 +55,7 @@ def update_team_by_id(team_id: int, data_for_update: TeamSearch):
 
 
 @router.delete("/delete")
-def delete_team(team: TeamSearch):
+def delete_team(team: Team):
     with Session(engine) as session:
         if team.name:
             statement = select(Team).where(Team.name == team.name)

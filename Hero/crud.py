@@ -7,13 +7,22 @@ from Hero.database import engine, Hero
 
 router = APIRouter(tags=['Heroes'], prefix='/heroes')
 
-@router.post('/newHero', response_model=Hero)
+@router.post('/newHero')
 def create_hero(hero: Hero):
     with Session(engine) as session:
         session.add(hero)
         session.commit()
         session.refresh(hero)
         return {"New hero": hero}
+
+
+@router.get("/allHero", response_model=List[Hero])
+def get_all_hero():
+    with Session(engine) as session:
+        statement = select(Hero)
+        result = session.exec(statement)
+        return result.all()
+
 
 @router.get("/{hero_id}", response_model=Hero)
 def get_hero_by_id(hero_id: int):
@@ -23,17 +32,13 @@ def get_hero_by_id(hero_id: int):
             raise HTTPException(status_code=404, detail="Hero not found")
         return result
 
-@router.get("/allHero", response_model=List[Hero])
-def get_all_hero():
-    with Session(engine) as session:
-        statement = select(Hero)
-        result = session.exec(statement)
-        return result.all()
 
-@router.put('/uptade/{hero_id}', response_model=Hero)
+@router.put('/uptade/{hero_id}')
 def update_hero_by_id(hero_id: int, data_for_update: HeroSearch):
     with Session(engine) as session:
         hero = session.get(Hero, hero_id)
+        if not hero:
+            raise HTTPException(status_code=404, detail="hero not found")
         if not data_for_update:
             raise HTTPException (status_code=404, detail="Please send data for update")
         if data_for_update.name:
@@ -48,6 +53,7 @@ def update_hero_by_id(hero_id: int, data_for_update: HeroSearch):
         session.refresh(hero)
 
         return {"Hero update": hero}
+
 
 @router.delete("/delete")
 def delete_hero(hero:HeroSearch):
