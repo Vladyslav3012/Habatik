@@ -2,8 +2,8 @@ from sqlmodel import Session, select
 from fastapi import APIRouter, HTTPException
 from typing import List
 
-from Hero.schemas import HeroSearch
-from Hero.database import engine, Hero
+from Habatik.Hero.schemas import HeroSearch
+from Habatik.Hero.database import engine, Hero
 
 router = APIRouter(tags=['Heroes'], prefix='/heroes')
 

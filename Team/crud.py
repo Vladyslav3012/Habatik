@@ -2,8 +2,8 @@ from sqlmodel import Session, select
 from fastapi import APIRouter, HTTPException
 from typing import List
 
-from Team.schemas import TeamSearch
-from Team.database import engine, Team
+from Habatik.Team.schemas import TeamSearch
+from Habatik.Team.database import engine, Team
 
 router = APIRouter(tags=['Teams'], prefix='/teams')
 
