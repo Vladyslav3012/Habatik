@@ -1,0 +1,6 @@
+echo "*" > .venv/.gitignore
+__pycache__/
+*.pyc
+.idea/
+.venv/
+
